@@ -19,13 +19,13 @@ docker run --rm --name gb5_test -p 80:80 -v ./www:/var/www/html docker-gb5
 version: '3.4'
 services:
   web:
-    image: 'docker-gb5'
+    image: 'jay94ks/docker-gb5'
     build: # <-- 이 섹션은 미리 빌드된 이미지를 사용하지 않을 때만 지정해 주세요.
       context: .
       dockerfile: Dockerfile
     container_name: 'web'
     volumes:
-      - "./www:/var/www/html"
+      - "./web/www:/var/www/html"
     ports: 
         - 80:80 # 기본 포트가 아닌 다른 포트로 사용하시려면 포트 번호를 변경해 주세요.
     links: 
@@ -41,7 +41,7 @@ services:
       MYSQL_PASSWORD: '<생성될 DB 패스워드>'
       MYSQL_ROOT_PASSWORD: '<생성될 DB ROOT 패스워드>' # DB 루트 계정이 필요하지 않다면 지정하지 마세요.
     volumes:
-      - '/web/db:/var/lib/mysql'
+      - './web/db:/var/lib/mysql'
     ports: # DB에 직접 접근해서 볼 수 있어야 하는게 아니라면 지정하지 마세요.
       - '3306:3306'
     command:
