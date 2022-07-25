@@ -20,7 +20,7 @@ function load_conf() : ?array {
 
         $defs = [];
         foreach ($file as $i => $line) {
-            $tmp = $trim($line, " \t\r\n");
+            $tmp = trim($line, " \t\r\n");
 
             if (($p = strpos($tmp, 'define')) !== false && !$p) {
                 $cfg = explode(',', trim(substr($tmp, 6)), 2); // --> ('G5_...', 'VALUE');
