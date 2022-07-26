@@ -50,6 +50,25 @@ services:
       - '--collation-server=utf8mb4_unicode_ci'
 ```
 
+커스텀 초기화 스크립트 실행하는 방법.
+```
+web:
+	...............
+	command:
+		- "my_init.php"
+	
+	# 기준 경로: /var/www/html
+	# 웹에서 접근이 되지 말아야 하는 경우엔,
+	# 아래처럼 작업해 주세요.
+	
+	volumes:
+      - "./hidden:/root/hidden"
+	  
+	command:
+		- "/root/hidden/my-init.php"
+
+```
+
 ### 아파치 설정값
 본 컨테이너는 아파치 설정 수준에서 아래 디렉토리 및 파일들에 대한 접근을 차단하거나 변경합니다.
 
