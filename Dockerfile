@@ -25,4 +25,4 @@ COPY ./php-cli.ini /etc/php/7.4/cli/php.ini
 COPY ./php-www.ini /etc/php/7.4/apache2/php.ini
 
 RUN chown root:root /root/entry.sh && chmod +x /root/entry.sh
-ENTRYPOINT [ "/bin/bash", "-c", "/root/entry.sh" ]
+ENTRYPOINT [ "/root/entry.sh" ]

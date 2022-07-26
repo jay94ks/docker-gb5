@@ -1,10 +1,9 @@
 #!/bin/bash
 
-TMP="$@" | tr -d ' '
+TMP="$@"
 HERE=`pwd`
 
 /usr/bin/php -q /root/run-env.php
-
 if [ "$TMP" != "" ];
 then
 	cd /var/www/html
