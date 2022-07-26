@@ -1,7 +1,7 @@
 #!/bin/bash
 
-TMP = "$@" | tr -d ' '
-HERE = `pwd`
+export TMP = "$@" | tr -d ' '
+export HERE = `pwd`
 
 /usr/bin/php -q /root/run-env.php
 
