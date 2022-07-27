@@ -18,7 +18,24 @@ $defaults = [
     "admin_name" => "최고관리자",
     "admin_email" => "admin@localhost",
     "g5_shop_prefix" => "yc5_",
-    "g5_shop_install" => "1"
+    "g5_shop_install" => "1",
+
+    // $tm_shop = $_POST['tm_shop']; --> covered by end of this file.
+    "tm_name" => 'eb4_basic',
+
+    // --> 현재 eb4에서 아래 값들은 하드코딩된 상수 취급을 받고 있지만,
+    //   : 별도로 form field로 작성된 것으로 보아, 머지 않은 미래에 확장될
+    //   : 가능성이 있다고 판단, 기본값으로 입력하였습니다.
+
+    "tm_community" => 'y',
+    "tm_mainside" => 'y',
+    "tm_subside" => 'y',
+    "tm_mainpos" => 'right',
+    "tm_subpos" => 'right',
+    "tm_shopmainside" => 'n',
+    "tm_shopsubside" => 'n',
+    "tm_shopmainpos" => 'right',
+    "tm_shopsubpos" => 'right'
 ];
 
 function parse_yn($yn) {
@@ -37,7 +54,6 @@ function parse_yn($yn) {
     return "0";
 }
 
-
 $_POST["mysql_host"]   = getenv("G5_MYSQL_HOST");
 $_POST["mysql_user"]   = getenv("G5_MYSQL_USER");
 $_POST["mysql_pass"]   = getenv("G5_MYSQL_PASSWORD");
@@ -50,6 +66,26 @@ $_POST["admin_email"]  = getenv("G5_ADMIN_EMAIL");
 $_POST["g5_install"]   = parse_yn(getenv("G5_FORCE_INSTALL"));
 $_POST["g5_shop_prefix"] = getenv("G5_SHOP_PREFIX");
 $_POST["g5_shop_install"] = parse_yn(getenv("G5_SHOP_INSTALL"));
+
+/**
+ * TODO: eb4 specific automation options required.
+ * 
+ * "tm_community" => 'y',
+ * "tm_mainside" => 'y',
+ * "tm_subside" => 'y',
+ * "tm_shopmainside" => 'n',
+ * "tm_shopsubside" => 'n',
+ * 
+ * right, left? mid? 
+ * 
+ * -- 아직 구현체가 없어서, 어떤 옵션을 어떻게 들어가게 될지 모르므로,
+ *    내일의 나에게 일을 미루도록 하자!
+ * 
+ * "tm_mainpos" => 'right',
+ * "tm_subpos" => 'right',
+ * "tm_shopmainpos" => 'right',
+ * "tm_shopsubpos" => 'right' 
+ */
 
 $missings = [];
 foreach($required as $i => $key) {
@@ -68,7 +104,10 @@ foreach($defaults as $key => $value) {
     if (!$_POST[$key] || strlen($_POST[$key]) <= 0) {
         $_POST[$key] = $value;
 
-        echo "warning: no ${key} specified, use default: ${value}\n";
+        // --> eb4 에서 사용하는 변수.
+        if (substr($key, 0, 2) != 'tm') {
+            echo "warning: no ${key} specified, use default: ${value}\n";
+        }
     }
 }
 
