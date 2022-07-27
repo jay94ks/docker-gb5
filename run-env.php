@@ -10,7 +10,7 @@ define ('DB_CONF', WWWDATA . '/dbconfig.php');
 
 function load_conf() : ?array {
     if (file_exists(DB_CONF)) {
-        $file = explode("\n", DB_CONF);
+        $file = explode("\n", file_get_contents(DB_CONF));
         $targets = [
             'G5_MYSQL_HOST',
             'G5_MYSQL_USER',
@@ -28,14 +28,14 @@ function load_conf() : ?array {
                 $val = trim(substr($cfg[1], 0, strlen($cfg[1]) - 2));
 
                 if (array_search($name, $targets) !== false) {
-                    eval("\$tmp = ${val}");
+                    eval("\$tmp = ${val};");
                     $defs[$name] = $tmp;
                 }
             }
         }
 
         // --> 필요한 인수가 모자라면 이 과정을 포기.
-        if (array_keys($defs) != count($targets)) {
+        if (count(array_keys($defs)) != count($targets)) {
             return null;
         }
         
