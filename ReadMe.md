@@ -1,5 +1,96 @@
 ## 그누보드 PHP + Apache2 컨테이너
 
+### `auto` branch
+이 branch는 그누보드 깃허브에서 파일을 동기화 받아,
+자동으로 설치하는 것 까지를 수행하는 컨테이너 이미지입니다.
+
+사용할 그누보드 버전은 아래처럼 지정합니다.
+(https://github.com/gnuboard/gnuboard5 내 `tags` 참조)
+```
+docker ..... -e G5_GIT_TAG=v5.5.8.2 .....
+```
+
+`docker-compose.yml` 사용시 (샘플 파일은 test 디렉토리에 있습니다)
+```
+web:
+	...............
+	environment:
+		- G5_GIT_TAG=v5.5.8.2   # (기본값)
+
+    # 현재 개발중인 branch를 사용하려면 master를 지정하면 되지만,
+    # master 브랜치는 preview 목적으로만 사용하시고,
+    # 안정 버전으로 지목된 branch를 사용하시길 권장드립니다.
+```
+
+자동 설치 인수는 환경변수로 전달하며, 아래와 같습니다.
+또한, 한번 설치가 진행된 이후엔 아래 인수들을 모두 `docker-compose.yml` 파일에서 제거해도 좋습니다.
+```
+1. 필수 인수
+  G5_MYSQL_HOST
+  G5_MYSQL_USER
+  G5_MYSQL_PASSWORD
+  G5_MYSQL_DB
+
+2. 옵션             (: 기본값 -> 입력 형식)
+  G5_TABLE_PREFIX   (: g5_)
+  G5_ADMIN_ID       (: admin)
+  G5_ADMIN_PASSWORD (: abcd1234)
+  G5_ADMIN_NAME     (: 최고관리자)
+  G5_ADMIN_EMAIL    (: admin@localhost)
+  G5_SHOP_PREFIX    (: yc5_)
+  G5_SHOP_INSTALL   (: 'yes' -> {y, yes} or {n, no})
+  G5_RM_LEGAL_INFO  (: 'no' -> {y, yes} or {n, no})
+  * --> 이 옵션은 설치 완료 후에 LICENSE.txt, README.md, perms.sh 파일을 삭제할지 여부입니다.
+```
+
+또한, 본 컨테이너 이미지는 아래의 특수 파일들을 생성합니다.
+그러므로, 호스트 볼륨을 마운팅 하실때 `/var/www` 디렉토리 자체를 마운팅 해주십시오.
+```
+/var/www/run  : 그누보드5 설치 정보
+  - g5-git    : 설치한 git branch tag, 즉, 버전을 기록.
+  - g5-www    : 그누보드가 설치되었다고 플래그를 기록.
+  * 이 파일들을 삭제할 경우, 그누보드를 완전히 새로 설치하게 됩니다. (기존 파일을 덮어 씁니다)
+  * 여러 안전 조치를 수행하긴 하지만, 위 파일들을 삭제하지 않도록 주의해 주십시오.
+    - data 디렉토리의 dbconfig.php 파일 존재 유무 검사.
+    - 컨테이너 자체 /root/install-auto.php 파일.
+      * 자동 설치가 정상적으로 완료되면 이 파일이 삭제되며,
+      + 위 파일들이 모두 손상된 상태에서 컨테이너가 실행되면,
+      + install-auto.php 파일이 존재하지 않으면,
+        아래 메시지를 출력하며 더 진행되어 손상되지 않도록 막습니다.
+      : >> fatal: the g5 installation maybe corrupted.
+
+/var/www/html : 그누보드가 설치되는 경로.
+```
+
+GIT 혹은 SVN으로 운영중인 사이트를 복제하도록 구성하려면, 아래를 참고해 주세요.
+이 단락에서는 볼륨을 마운팅하지 않는 것을 기본 전제로 깔고 갑니다.
+
+1. Dockerfile 작성하기.
+```
+FROM jay94ks/docker-g5:latest-auto
+ENV G5_GIT_TAG=v5.5.8.2
+
+# 내장시킬 사이트 파일들을 기본 이미지에 복사합니다.
+# 복사되는 순서는 git clone 직후이며, auto-install 스크립트가 실행 되기 전입니다.
+# 혹은, git, svn 등으로 동기화를 받도록 만들수도 있겠습니다.
+# 그리고, /apps/ 경로에 site-init.sh파일을 만들면,
+# 최초 컨테이너 시작시 그걸 실행시키고,
+# site-up.sh 파일을 만들면, 매 컨테이너 실행시 마다 실행시켜 줍니다. (root 권한)
+COPY ./site/ /apps/html
+
+# 이 부분은 auto-install 스크립트 실행을 차단시킵니다.
+# 사이트 파일에 dbconfig.php 파일이 존재하고, 이미 운영중인
+# MySQL을 사용한다면 이 부분이 반드시 필요합니다.
+RUN mkdir -pv /var/www/run && touch /var/www/run/g5-www \
+ && rm -rf /root/install-auto.php
+
+# 커스텀 초기화 스크립트를 사용하는 경우,
+COPY ./custom-init.php /root/custom-init.php
+
+ENTRYPOINT [ "/root/entry.sh" ]
+CMD [ "/root/custom-init.php" ]
+```
+
 ### 사용법
 본 컨테이너는 그누보드5 혹은 영카트5를 지원하며,
 파생 빌더의 경우, `dbconfig.php` 파일을 다른 위치에 배치하거나,

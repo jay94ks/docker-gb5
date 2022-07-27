@@ -1,0 +1,50 @@
+version: '3.4'
+services:
+  web:
+    image: 'jay94ks/docker-gb5:latest-auto'
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    container_name: 'web'
+    environment:
+      - G5_GIT_TAG=v5.5.8.2
+      - G5_MYSQL_HOST=web-db
+      - G5_MYSQL_USER=mygb5
+      - G5_MYSQL_PASSWORD=mygb12345678
+      - G5_MYSQL_DB=mygb5
+      - G5_ADMIN_ID=super
+      - G5_ADMIN_PASSWORD=mygb12345678
+      - G5_ADMIN_NAME=Automated
+      - G5_ADMIN_EMAIL=jay94ks@gmail.com
+      - G5_RM_LEGAL_INFO=yes
+      - G5_SHOP_INSTALL=no
+    volumes:
+      - "./web/g5:/var/www"
+    ports: 
+        - 80:80
+    networks:
+      - 'web-net'
+        
+  web-db:
+    image: 'mysql:latest'
+    container_name: 'web-db'
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'mygb5'
+      MYSQL_USER: 'mygb5'
+      MYSQL_PASSWORD: 'mygb12345678'
+      MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
+    volumes:
+      - './web/db:/var/lib/mysql'
+    ports: # DB에 직접 접근해서 볼 수 있어야 하는게 아니라면 지정하지 마세요.
+      - '3309:3306'
+    command:
+      - '--character-set-client-handshake=FALSE'
+      - '--character-set-server=utf8mb4'
+      - '--collation-server=utf8mb4_unicode_ci'
+    networks:
+      - 'web-net'
+      
+networks:
+  web-net:
+    driver: overlay

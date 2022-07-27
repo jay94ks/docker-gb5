@@ -1,5 +1,3 @@
-#!/bin/bash
-
 docker build -t jay94ks/docker-gb5:v20220727-auto .
 docker push jay94ks/docker-gb5:v20220727-auto
 
