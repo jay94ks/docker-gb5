@@ -1,4 +1,5 @@
 ## 그누보드 PHP + Apache2 컨테이너
+* 자동화 버전은 "https://github.com/jay94ks/docker-gb5/tree/auto"를 참고해 주세요.
 
 ### 사용법
 본 컨테이너는 그누보드5 혹은 영카트5를 지원하며,
