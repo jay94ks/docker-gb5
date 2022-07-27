@@ -42,7 +42,6 @@ if [ ! -f "$WWWROOT/data/dbconfig.php" ]; then
 		rm -rf /tmp/g5/.git*
 
 		mv -fv /tmp/g5/* "$WWWROOT/"
-		mv -fv /tmp/g5/.* "$WWWROOT/"
 		rm -rf /tmp/g5
 
 		echo "$TARGET" > "$WWWRUN/g5-tag"
@@ -65,7 +64,6 @@ if [ ! -f "$WWWROOT/data/dbconfig.php" ]; then
 		rm -rf /tmp/eb4/.git*
 
 		cp -rvf /tmp/eb4/* "$WWWROOT/"
-		cp -rvf /tmp/eb4/.* "$WWWROOT/"
 		rm -rf /tmp/eb4
 
 		# --> eb4 doesn't publish any tags, so nothing to write.
@@ -78,7 +76,6 @@ if [ ! -f "$WWWROOT/data/dbconfig.php" ]; then
 
 			echo "copying application files..."
 			cp -Rf /apps/* "$WWW/"
-			cp -Rf /apps/.* "$WWW/"
 			RUN_APPS_INIT='y'
 		fi
 	fi
