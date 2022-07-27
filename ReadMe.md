@@ -41,6 +41,12 @@ web:
   G5_SHOP_INSTALL   (: 'yes' -> {y, yes} or {n, no})
   G5_RM_LEGAL_INFO  (: 'no' -> {y, yes} or {n, no})
   * --> 이 옵션은 설치 완료 후에 LICENSE.txt, README.md, perms.sh 파일을 삭제할지 여부입니다.
+
+  G5_RM_IMORT_UTILS (: 'no' -> {y, yes} or {n, no})
+  * --> 이 옵션은 설치 완료 후에 g4_import{,_run}.php, yc4_import{,_run}.php 파일을 삭제할지 여부입니다.
+  G5_RM_YC_OLD_UTIL (: 'no' -> {y, yes} or {n, no})
+  * --> 이 옵션은 orderupgrade.php 파일을 삭제할지 여부입니다.
+  * --> v5.5.8.2에서는 이미 적용된 상태이므로 신규 설치시에는 불필요합니다.
 ```
 
 또한, 본 컨테이너 이미지는 아래의 특수 파일들을 생성합니다.
