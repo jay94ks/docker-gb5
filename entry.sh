@@ -33,6 +33,7 @@ if [ ! -f "$WWWROOT/data/dbconfig.php" ]; then
 
 		if [ "$?" != "0" ]; then
 			rm -rf "$WWWRUN/g5-tag"
+			rm -rf /tmp/g5
 			exit 1
 		fi
 
@@ -45,6 +46,30 @@ if [ ! -f "$WWWROOT/data/dbconfig.php" ]; then
 		rm -rf /tmp/g5
 
 		echo "$TARGET" > "$WWWRUN/g5-tag"
+	fi
+
+	if [ ! -f "$WWWRUN/eb4-tag" ]; then
+		mkdir -pv /tmp/eb4 && cd /tmp/eb4
+		git clone \
+			"https://github.com/eyoom/eyoom_builder_4.git" \
+			--verbose .
+
+		if [ "$?" != "0" ]; then
+			rm -rf "$WWWRUN/eb4-tag"
+			rm -rf /tmp/eb4
+			exit 1
+		fi
+
+		echo "GIT sync done (eb4), copying files..."
+		rm -rf /tmp/eb4/.git
+		rm -rf /tmp/eb4/.git*
+
+		cp -rvf /tmp/eb4/* "$WWWROOT/"
+		cp -rvf /tmp/eb4/.* "$WWWROOT/"
+		rm -rf /tmp/eb4
+
+		# --> eb4 doesn't publish any tags, so nothing to write.
+		echo "??" > "$WWWRUN/eb4-tag"
 
 		if [ -d "/apps" ]; then
 			if [ -f "$WWWRUN/g5-www" ]; then
@@ -61,20 +86,20 @@ if [ ! -f "$WWWROOT/data/dbconfig.php" ]; then
 	if [ ! -f "$WWWRUN/g5-www" ]; then
 		if [ -d "$WWWROOT/install" ]; then
 			if [ ! -f "/root/install-auto.php" ]; then
-				echo "fatal: the g5 installation maybe corrupted."
+				echo "fatal: the g5 with eb4 installation maybe corrupted."
 				exit 1;
 			fi
 
 			# copy custom installation script.
-			cp -R /root/install-auto.php "$WWWROOT/install/"
+			cp -R /root/install-auto.php "$WWWROOT/eyoom/install/"
 			mkdir -pv "$WWWROOT/data"
 
 			chmod 777 "$WWWDATA"
 			chown -R www-data:www-data "$WWWDATA"
 
-			cd "$WWWROOT/install"
+			cd "$WWWROOT/eyoom/install"
 			echo "executing automation script..."
-			/usr/bin/php -q "$WWWROOT/install/install-auto.php"
+			/usr/bin/php -q "$WWWROOT/eyoom/install/install-auto.php"
 
 			if [ "$?" != "0" ]; then
 				rm -rf "$WWWRUN/g5-www"
@@ -83,10 +108,11 @@ if [ ! -f "$WWWROOT/data/dbconfig.php" ]; then
 			fi
 
 			# store 1 to remember the g5 installed.
-			echo "-> g5 installed successfully."
+			echo "-> g5 with eb4 installed successfully."
 			echo "$WWWROOT" > "$WWWRUN/g5-www"
 
 			# then, delete the installation files.
+			rm -rf "$WWWROOT/eyoom/install"
 			rm -rf "$WWWROOT/install"
 			rm -rf /root/install-auto.php
 

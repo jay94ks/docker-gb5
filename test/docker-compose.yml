@@ -1,7 +1,7 @@
 version: '3.4'
 services:
   web:
-    image: 'jay94ks/docker-gb5:latest-auto'
+    image: 'jay94ks/docker-gb5:latest-auto-eb4'
     build:
       context: ..
       dockerfile: Dockerfile
@@ -9,11 +9,11 @@ services:
     environment:
       - G5_GIT_TAG=v5.5.8.2
       - G5_MYSQL_HOST=web-db
-      - G5_MYSQL_USER=mygb5
-      - G5_MYSQL_PASSWORD=mygb12345678
-      - G5_MYSQL_DB=mygb5
-      - G5_ADMIN_ID=super
-      - G5_ADMIN_PASSWORD=mygb12345678
+      - G5_MYSQL_USER=myeb4
+      - G5_MYSQL_PASSWORD=myeb4!
+      - G5_MYSQL_DB=myeb4
+      - G5_ADMIN_ID=admin
+      - G5_ADMIN_PASSWORD=abcd1234
       - G5_ADMIN_NAME=Automated
       - G5_ADMIN_EMAIL=jay94ks@gmail.com
       - G5_RM_LEGAL_INFO=yes
@@ -30,9 +30,9 @@ services:
     container_name: 'web-db'
     restart: always
     environment:
-      MYSQL_DATABASE: 'mygb5'
-      MYSQL_USER: 'mygb5'
-      MYSQL_PASSWORD: 'mygb12345678'
+      MYSQL_DATABASE: 'myeb4'
+      MYSQL_USER: 'myeb4'
+      MYSQL_PASSWORD: 'myeb4!'
       MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
     volumes:
       - './web/db:/var/lib/mysql'

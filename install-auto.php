@@ -99,10 +99,10 @@ ob_start();
 
 // --> 작업 경로가 다를 경우를 대비해 현재 디렉토리로 변경합니다.
 chdir (__DIR__);
-include (__DIR__ . "/install_db.php");
+include (__DIR__ . "/setup_db.php");
 ob_end_clean();
 
-if (!file_exists(__DIR__ . "/../data/dbconfig.php")) {
+if (!file_exists(__DIR__ . "/../../data/dbconfig.php")) {
     echo "failed to install g5 automatically.\n";
     echo "if this occurs again, consider to use non-auto branches.\n";
     exit(1);
@@ -110,22 +110,22 @@ if (!file_exists(__DIR__ . "/../data/dbconfig.php")) {
 
 $rm_legal_info = parse_yn(getenv("G5_RM_LEGAL_INFO"));
 if ($rm_legal_info == "1") {
-    unlink (__DIR__ . "/../LICENSE.txt");
-    unlink (__DIR__ . "/../README.md");
-    unlink (__DIR__ . "/../perms.sh");
+    unlink (__DIR__ . "/../../LICENSE.txt");
+    unlink (__DIR__ . "/../../README.md");
+    unlink (__DIR__ . "/../../perms.sh");
 }
 
 $rm_import_utils = parse_yn(getenv("G5_RM_IMORT_UTILS"));
 if ($rm_import_utils == '1') {
-    unlink (__DIR__ . "/../g4_import.php");
-    unlink (__DIR__ . "/../g4_import_run.php");
-    unlink (__DIR__ . "/../yc4_import.php");
-    unlink (__DIR__ . "/../yc4_import_run.php");
+    unlink (__DIR__ . "/../../g4_import.php");
+    unlink (__DIR__ . "/../../g4_import_run.php");
+    unlink (__DIR__ . "/../../yc4_import.php");
+    unlink (__DIR__ . "/../../yc4_import_run.php");
 }
 
 $rm_yc_old_util = parse_yn(getenv("G5_RM_YC_OLD_UTIL"));
 if ($rm_yc_old_util == '1') {
-    unlink (__DIR__ . "/../orderupgrade.php");
+    unlink (__DIR__ . "/../../orderupgrade.php");
 }
 
 exit(0);

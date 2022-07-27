@@ -1,11 +1,15 @@
 ## 그누보드 PHP + Apache2 컨테이너
 
-### `auto` branch
-이 branch는 그누보드 깃허브에서 파일을 동기화 받아,
+### `auto-eb4` branch
+이 branch는 그누보드 깃허브 및 이윰빌더 시즌4 깃허브에서 파일을 동기화 받으며,
 자동으로 설치하는 것 까지를 수행하는 컨테이너 이미지입니다.
 
 사용할 그누보드 버전은 아래처럼 지정합니다.
 (https://github.com/gnuboard/gnuboard5 내 `tags` 참조)
+(https://github.com/eyoom/eyoom_builder_4 참조, 버전 태깅을 사용하지 않는 리포지터리, 즉, 항상 최신으로 설치됩니다)
+
+* 본 도커 이미지를 사용하기 전 반드시 사용권 계약을 읽어보시길 바랍니다.
+-> https://eyoom.net/page/eb4_license (그누보드와 달리 eb4는 LGPLv2.1이 아닙니다!)
 ```
 docker ..... -e G5_GIT_TAG=v5.5.8.2 .....
 ```
@@ -20,6 +24,9 @@ web:
     # 현재 개발중인 branch를 사용하려면 master를 지정하면 되지만,
     # master 브랜치는 preview 목적으로만 사용하시고,
     # 안정 버전으로 지목된 branch를 사용하시길 권장드립니다.
+    # -----
+    # eb4가 정상적으로 동작하려면,
+    # https://eyoom.net/ 에서 공지한 g5 버전으로 맞춰 지정해 주시기 바랍니다.
 ```
 
 자동 설치 인수는 환경변수로 전달하며, 아래와 같습니다.
@@ -39,6 +46,8 @@ web:
   G5_ADMIN_EMAIL    (: admin@localhost)
   G5_SHOP_PREFIX    (: yc5_)
   G5_SHOP_INSTALL   (: 'yes' -> {y, yes} or {n, no})
+  EB4_RM_LEGAL_INFO (: 'no' -> {y, yes} or {n, no})
+  * --> 이 옵션은 설치 완료 후에 eyoom/LICENSE.txt 파일을 삭제할지 여부입니다.
   G5_RM_LEGAL_INFO  (: 'no' -> {y, yes} or {n, no})
   * --> 이 옵션은 설치 완료 후에 LICENSE.txt, README.md, perms.sh 파일을 삭제할지 여부입니다.
 
