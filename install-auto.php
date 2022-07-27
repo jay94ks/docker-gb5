@@ -37,6 +37,7 @@ function parse_yn($yn) {
     return "0";
 }
 
+
 $_POST["mysql_host"]   = getenv("G5_MYSQL_HOST");
 $_POST["mysql_user"]   = getenv("G5_MYSQL_USER");
 $_POST["mysql_pass"]   = getenv("G5_MYSQL_PASSWORD");
@@ -92,6 +93,19 @@ while(true) {
     usleep(1000 * 1000);
 }
 
+// --> from eyoom/install/setup_db.php on line 41
+$_POST['tm_shop'] = file_exists('../../shop.config.php') ? 'y': 'n';
+
+// --> eyoom/install/setup_db.php on line 143, 187.
+$g5_install = $_POST["g5_install"];
+
+// --> eyoom/install/setup_db.php on line 72
+$g5_shop_prefix = $_POST["g5_shop_prefix"];
+
+// --> eyoom/install/setup_db.php on line 726
+$_SERVER['HTTP_HOST'] = ""; 
+
+// --> g5 requires:
 $_SERVER['REMOTE_ADDR'] = "127.0.0.1";
 
 // --> CLI에 HTML이 출력되는 것을 방지합니다.

@@ -82,7 +82,7 @@ GIT 혹은 SVN으로 운영중인 사이트를 복제하도록 구성하려면, 
 
 1. Dockerfile 작성하기.
 ```
-FROM jay94ks/docker-g5:latest-auto
+FROM jay94ks/docker-g5:latest-auto-eb4
 ENV G5_GIT_TAG=v5.5.8.2
 
 # 내장시킬 사이트 파일들을 기본 이미지에 복사합니다.
