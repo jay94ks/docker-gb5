@@ -17,6 +17,9 @@ services:
       - G5_ADMIN_NAME=Automated
       - G5_ADMIN_EMAIL=jay94ks@gmail.com
       - G5_RM_LEGAL_INFO=yes
+      - EB4_RM_LEGAL_INFO=yes
+      - G5_RM_IMORT_UTILS=yes
+      - G5_RM_YC_OLD_UTIL=yes
       - G5_SHOP_INSTALL=no
     volumes:
       - "./web/g5:/var/www"

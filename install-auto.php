@@ -101,7 +101,7 @@ if (count($missings) > 0) {
 
 // --> 필수 인자가 아니라면, 기본값으로 설치합니다.
 foreach($defaults as $key => $value) {
-    if (!$_POST[$key] || strlen($_POST[$key]) <= 0) {
+    if (!isset($_POST[$key]) || !$_POST[$key] || strlen($_POST[$key]) <= 0) {
         $_POST[$key] = $value;
 
         // --> eb4 에서 사용하는 변수.
@@ -166,6 +166,11 @@ if ($rm_legal_info == "1") {
     unlink (__DIR__ . "/../../LICENSE.txt");
     unlink (__DIR__ . "/../../README.md");
     unlink (__DIR__ . "/../../perms.sh");
+}
+
+$rm_eb4_legal_info = parse_yn(getenv("EB4_RM_LEGAL_INFO"));
+if ($rm_eb4_legal_info == "1") {
+    unlink (__DIR__ . "/../LICENSE.txt");
 }
 
 $rm_import_utils = parse_yn(getenv("G5_RM_IMORT_UTILS"));
