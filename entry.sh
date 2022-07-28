@@ -9,7 +9,7 @@ WWWROOT="/var/www/html"
 WWWDATA="/var/www/html/data"
 WWWRUN="/var/www/run"
 
-if [ "$TARGET" != "" ]; then
+if [ "$TARGET" == "" ]; then
 	TARGET="v5.5.8.2"
 fi
 
